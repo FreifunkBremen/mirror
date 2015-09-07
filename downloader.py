@@ -38,17 +38,11 @@ class Downloader:
         command.extend(["-X", "/firmware/nightly"])
 
         # the url
-        command.extend(self.base_url)
+        command.extend([self.base_url])
 
         # Start the subprocess
         process = subprocess.Popen(command, stdin=subprocess.PIPE)
-        try:
-            # write to stdin
-            process.communicate(input=self.lines)
-        except:
-            process.kill()
-            process.wait()
-            raise
+        process.wait()
 
 l = Downloader(sys.argv[1])
 l.download()
