@@ -82,6 +82,6 @@ class Manifest:
 mf = Manifest(sys.argv[1])
 
 if mf.verify(sys.argv[2]):
-    print "signatures valid"
+    print("signatures valid")
 else:
-    print "signatures invalid"
+    print("signatures invalid")
