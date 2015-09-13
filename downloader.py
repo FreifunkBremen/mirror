@@ -10,11 +10,20 @@ import subprocess
 
 
 class Downloader:
-    def __init__(self, base_url):
+    def __init__(self, base_url, output_dir=""):
         self.base_url = base_url
+        self.output_dir = output_dir
 
     def download(self):
         command = ["wget"]
+
+        # -P Set directory prefix to prefix. The directory
+        # prefix is the directory where all other files
+        # and sub-directories will be saved to, i.e.
+        # the top of the retrieval tree.
+        # The default is . (the current directory).
+        if self.output_dir != "":
+            command.extend(["-P", self.output_dir])
 
         # -N don't re-retrieve files unless newer than local
         command.extend(["-N"])
