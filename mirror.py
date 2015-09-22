@@ -48,14 +48,10 @@ class Mirror:
             manifest_path = self.get_manifest_path(b)
 
             print(str.format("Downloading {0}{1}", b, self.MANIFEST_EXT))
-<<<<<<< HEAD
 
             if not self.downloader.download(manifest_url, manifest_path):
                 print("The manifest has same timestamp as the local file. Nothing to do.")
                 continue
-=======
-            self.downloader.download(manifest_url, manifest_path)
->>>>>>> 6499407a0b036df0c3dea59a99e9fb0e2144b2d9
 
             manifest = Manifest(manifest_path)
 
@@ -85,11 +81,7 @@ class Mirror:
             path = str.format("{0}/{1}/{2}", self.working_directory, b, self.SYSUPGRADE)
             os.makedirs(path)
 
-<<<<<<< HEAD
 if len(sys.argv) > 2:
-=======
-if len(sys.argv) >= 2:
->>>>>>> 6499407a0b036df0c3dea59a99e9fb0e2144b2d9
     mirror = Mirror(sys.argv[1], sys.argv[2])
 else:
     mirror = Mirror(sys.argv[1])
