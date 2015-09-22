@@ -8,13 +8,16 @@ import urllib2
 
 
 class Downloader:
+    def __init__(self):
+        self.DATE_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
+
     def download(self, url, destination):
         request = urllib2.Request(url)
 
         # Get modification time
         if os.path.isfile(destination):
             unix = int(os.path.getmtime(destination))
-            request.headers["if-modified-since"] = datetime.datetime.fromtimestamp(unix).strftime('%a, %d %b %Y %H:%M:%S GMT')
+            request.headers["if-modified-since"] = datetime.datetime.fromtimestamp(unix).strftime(self.DATE_FORMAT)
 
         try:
             opener = urllib2.build_opener()
@@ -26,7 +29,6 @@ class Downloader:
                 print(str.format("{0} is up to date.", destination))
                 return False
             raise
-
 
         # Write to file
         with open(destination, 'w') as f:

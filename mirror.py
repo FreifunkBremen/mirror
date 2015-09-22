@@ -4,6 +4,7 @@
 #
 # ./mirror http://downloads.bremen.freifunk.net/firmware/
 #
+import hashlib
 
 from downloader import Downloader
 from gluon_manifest import Manifest
@@ -15,6 +16,8 @@ import shutil
 class Mirror:
     SYSUPGRADE = "sysupgrade"
     MANIFEST_EXT = ".manifest"
+    BUFFER_SIZE = 4096
+    DEBUG = False
 
     def __init__(self, url, destination="work"):
         self.url = url
@@ -51,7 +54,8 @@ class Mirror:
 
             if not self.downloader.download(manifest_url, manifest_path):
                 print("The manifest has same timestamp as the local file. Nothing to do.")
-                continue
+                if not self.DEBUG:
+                    continue
 
             manifest = Manifest(manifest_path)
 
@@ -70,10 +74,22 @@ class Mirror:
             file_path = self.get_file_path(b, f[manifest.FILE_NAME])
             self.downloader.download(file_url, file_path)
 
+            hash_sum = self.create_sha512(file_path)
+            if not hash_sum == f[manifest.HASH_SUM]:
+                print("Hash does not match, deleting file...")
+                os.remove(file_path)
+
+    def create_sha512(self, file_name):
+        sha = hashlib.sha512()
+        with open(file_name) as f:
+            for chunk in iter(lambda: f.read(self.BUFFER_SIZE), ""):
+                sha.update(chunk)
+        return sha.hexdigest()
+
     def _prepare_directories(self):
-        # keeped for debugging
-        #if os.path.exists(self.working_directory):
-        #    shutil.rmtree(self.working_directory)
+        if self.DEBUG:
+            if os.path.exists(self.working_directory):
+                shutil.rmtree(self.working_directory)
 
         for b in self.branches:
             path = str.format("{0}/{1}/{2}", self.working_directory, b, self.SYSUPGRADE)
