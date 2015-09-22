@@ -58,3 +58,9 @@ target/
 
 # PyCharm
 .idea/
+
+# Custom ec8or
+work/
+*.bin
+*.gz
+*.image
