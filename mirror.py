@@ -66,20 +66,19 @@ class Mirror:
     def get_images(self, manifest):
         b = str.lower(manifest.vars["BRANCH"])
         for f in manifest.firmwares:
-            print(str.format("Downloading {0}", f[manifest.NAME]))
             file_url = self.get_file_url(b, f[manifest.FILE_NAME])
             file_path = self.get_file_path(b, f[manifest.FILE_NAME])
             self.downloader.download(file_url, file_path)
 
     def _prepare_directories(self):
-        if os.path.exists(self.working_directory):
-            shutil.rmtree(self.working_directory)
-
-        os.mkdir(self.working_directory)
+        # keeped for debugging
+        #if os.path.exists(self.working_directory):
+        #    shutil.rmtree(self.working_directory)
 
         for b in self.branches:
             path = str.format("{0}/{1}/{2}", self.working_directory, b, self.SYSUPGRADE)
-            os.makedirs(path)
+            if not os.path.exists(path):
+                os.makedirs(path)
 
 if len(sys.argv) > 2:
     mirror = Mirror(sys.argv[1], sys.argv[2])
