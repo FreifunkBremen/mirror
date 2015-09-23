@@ -29,11 +29,11 @@ class Manifest:
         return self.vars["BRANCH"]
 
     # return whether enough signatures are valid
-    def verify(self, site_conf):
-        config = self.siteConf(site_conf)['autoupdater']['branches'][self.branch()]
+    def verify_signatures(self, site_conf):
+        config = self.site_conf(site_conf)['autoupdater']['branches'][self.branch()]
         command = ["ecdsaverify", "-n", str(config['good_signatures'])]
 
-        # Add pubkeys
+        # Add public keys
         for key in config['pubkeys']:
             command.extend(["-p", key])
 
@@ -42,18 +42,18 @@ class Manifest:
             command.extend(["-s", sig])
 
         # Start the subprocess
-        proc = subprocess.Popen(command, stdin=subprocess.PIPE)
+        ecdsa_process = subprocess.Popen(command, stdin=subprocess.PIPE)
         try:
             # write to stdin
-            proc.communicate(input=self.lines)
+            ecdsa_process.communicate(input=self.lines)
         except:
-            proc.kill()
-            proc.wait()
+            ecdsa_process.kill()
+            ecdsa_process.wait()
             raise
-        return proc.poll() == 0
+        return ecdsa_process.poll() == 0
 
     # the parsed site.conf
-    def siteConf(self, site_conf):
+    def site_conf(self, site_conf):
         with open(site_conf, 'r') as f:
             return lua.decode(f.read())
 
@@ -82,10 +82,3 @@ class Manifest:
 
     def _signatures(self, line):
         self.signatures.append(line)
-
-# mf = Manifest(sys.argv[1])
-
-# if mf.verify(sys.argv[2]):
-#    print("signatures valid")
-# else:
-#    print("signatures invalid")
