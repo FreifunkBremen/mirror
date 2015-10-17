@@ -31,6 +31,9 @@ class Mirror:
     def create(self):
         self._prepare_directories()
 
+        print("Get site conf...")
+        self.downloader.get_site_conf('site.conf')
+
         for b in self.branches:
             manifest = self.get_manifest(b)
             if manifest is None:
@@ -109,6 +112,7 @@ class Mirror:
             path = str.format("{0}/{1}/{2}", self.working_directory, b, self.SYSUPGRADE)
             if not os.path.exists(path):
                 os.makedirs(path)
+
 
 parser = argparse.ArgumentParser(description='Create a sysupgrade freifunk mirror.')
 parser.add_argument('-u', '--url', type=str, help='Source url of the mirror (http://...)', required=True)
