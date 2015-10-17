@@ -5,9 +5,12 @@ import os
 import datetime
 from dateutil import parser
 import urllib2
+import logging
 
 
 class Downloader:
+    log = logging.getLogger('mirror')
+
     def __init__(self):
         self.DATE_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
         self.SITE_CONF = 'https://raw.githubusercontent.com/FreifunkBremen/gluon-site-ffhb/master/site.conf'
@@ -23,11 +26,11 @@ class Downloader:
         try:
             opener = urllib2.build_opener()
             stream = opener.open(request)
-            print(str.format("{0} was downloaded to {1}.", url, destination))
+            self.log.info("%s was downloaded to %s.", url, destination)
         except urllib2.HTTPError, e:
             if e.code == 304:
                 # Not modified
-                print(str.format("{0} is up to date.", destination))
+                self.log.debug("%s is up to date.", destination)
                 return False
             raise
 
@@ -40,6 +43,8 @@ class Downloader:
             modified = parser.parse(stream.headers["last-modified"])
             unix = int(modified.strftime("%s"))
             os.utime(destination, (unix, unix))
+        else:
+            self.log.debug('stream does not contain last-modified')
 
         # File modified
         return True

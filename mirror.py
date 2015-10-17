@@ -12,6 +12,7 @@ import os
 import shutil
 # import sys
 import argparse
+import logging
 
 
 class Mirror:
@@ -19,6 +20,22 @@ class Mirror:
     MANIFEST_EXT = ".manifest"
     BUFFER_SIZE = 4096
     DEBUG = False
+
+    log = logging.getLogger('mirror')
+    log.setLevel(logging.DEBUG)
+
+    log_file = logging.FileHandler('mirror.log')
+    log_file.setLevel(logging.INFO)
+
+    log_console = logging.StreamHandler()
+    log_console.setLevel(logging.DEBUG)
+
+    formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(name)s:%(message)s')
+    log_file.setFormatter(formatter)
+    log_console.setFormatter(formatter)
+
+    log.addHandler(log_file)
+    log.addHandler(log_console)
 
     def __init__(self, url, site_conf, destination, force):
         self.url = url
@@ -31,13 +48,13 @@ class Mirror:
     def create(self):
         self._prepare_directories()
 
-        print("Get site conf...")
+        self.log.info("Get site conf...")
         self.downloader.get_site_conf('site.conf')
 
         for b in self.branches:
             manifest = self.get_manifest(b)
             if manifest is None:
-                print(str.format("Signature of manifest for branch {0} is valid. Begin download", b))
+                self.log.error("Signature of manifest for branch %s is not valid. Nothing will be downloaded.", b)
                 continue
 
             for f in manifest.firmwares:
@@ -49,24 +66,23 @@ class Mirror:
                 hash_sum = self.create_sha512(image_path)
 
                 if not hash_sum == f[manifest.HASH_SUM]:
-                    print("Hash does not match, deleting file...")
+                    self.log.error("Hash does not match, deleting file...")
                     os.remove(image_path)
 
     def get_manifest(self, b):
         manifest_url = self.get_manifest_url(b)
         manifest_path = self.get_manifest_path(b)
 
-        print(str.format("Downloading {0}{1}", b, self.MANIFEST_EXT))
+        self.log.info("Downloading %s%s", b, self.MANIFEST_EXT)
 
         if not self.downloader.download(manifest_url, manifest_path):
-            print("The manifest has same timestamp as the local file. Nothing to do.")
+            self.log.info("The manifest has same timestamp as the local file. Nothing to do.")
             if self.force_enabled:
                 return None
 
         manifest = Manifest(manifest_path)
 
         if not manifest.verify_signatures(os.path.abspath("site.conf")):
-            print(str.format("Signature of manifest for branch {0} is not valid. Nothing will be downloaded.", b))
             return None
 
         return manifest
