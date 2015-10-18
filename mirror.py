@@ -52,9 +52,10 @@ class Mirror:
         self.downloader.get_site_conf('site.conf')
 
         for b in self.branches:
+            self.log.info("Get manifest for %s branch", b)
             manifest = self.get_manifest(b)
+            
             if manifest is None:
-                self.log.error("Signature of manifest for branch %s is not valid. Nothing will be downloaded.", b)
                 continue
 
             for f in manifest.firmwares:
@@ -77,12 +78,12 @@ class Mirror:
 
         if not self.downloader.download(manifest_url, manifest_path):
             self.log.info("The manifest has same timestamp as the local file. Nothing to do.")
-            if self.force_enabled:
-                return None
+            return None
 
         manifest = Manifest(manifest_path)
 
         if not manifest.verify_signatures(os.path.abspath("site.conf")):
+            self.log.error("Signature of manifest for branch %s is not valid. Nothing will be downloaded.", b)
             return None
 
         return manifest
