@@ -30,20 +30,19 @@ class Mirror:
     log_console = logging.StreamHandler()
     log_console.setLevel(logging.DEBUG)
 
-    formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(name)s:%(message)s')
+    formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: %(message)s')
     log_file.setFormatter(formatter)
     log_console.setFormatter(formatter)
 
     log.addHandler(log_file)
     log.addHandler(log_console)
 
-    def __init__(self, url, site_conf, destination, force):
+    def __init__(self, url, site_conf, destination):
         self.url = url
         self.working_directory = destination
         self.downloader = Downloader()
         self.branches = ["stable", "testing"]
         self.site_conf = site_conf
-        self.force_enabled = force
 
     def create(self):
         self._prepare_directories()
@@ -52,9 +51,8 @@ class Mirror:
         self.downloader.get_site_conf('site.conf')
 
         for b in self.branches:
-            self.log.info("Get manifest for %s branch", b)
             manifest = self.get_manifest(b)
-            
+
             if manifest is None:
                 continue
 
@@ -134,10 +132,9 @@ class Mirror:
 parser = argparse.ArgumentParser(description='Create a sysupgrade freifunk mirror.')
 parser.add_argument('-u', '--url', type=str, help='Source url of the mirror (http://...)', required=True)
 parser.add_argument('-s', '--site-conf', type=str, default='site.conf', help='Path to site.conf, default is ./site.conf')
-parser.add_argument('-f', '--force', type=bool, default=False, help='(re-)download the manifest anyway)')
 parser.add_argument('-r', '--root', type=str, default='mirror', help='Root directory of the mirror. Default is ./mirror')
 
 # were taken implicitly from sys.argv
 args = parser.parse_args()
 
-Mirror(args.url, args.site_conf, args.root, args.force).create()
+Mirror(args.url, args.site_conf, args.root).create()
