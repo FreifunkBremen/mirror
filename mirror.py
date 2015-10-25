@@ -5,11 +5,13 @@
 # ./mirror http://downloads.bremen.freifunk.net/firmware/
 #
 
-from downloader import Downloader
-from gluon_manifest import Manifest
 import hashlib
 import os
 import shutil
+
+from modules.downloader import Downloader
+from modules.gluon_manifest import Manifest
+
 # import sys
 import argparse
 import logging
