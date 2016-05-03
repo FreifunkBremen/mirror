@@ -2,8 +2,7 @@
 
 ## About
 
-Fireware-Mirror is a simple that should make you able to host a mirror of Freifunk firmware images. Its written in python.
-The application parses a _site.conf_ and get and verifies the _.manifest_, downloads all new and changed images and validates the file checksums.
+Fireware-Mirror is a simple python application that should make you able to host a mirror of Freifunk firmware images. Its written in python. The application parses a _site.conf_ and get and verifies the _.manifest_, downloads all new and changed images and validates the file checksums. It was created by @corny and @komaflash .
 
 The application contains the following modules:
 * __mirror.py__: The heart.
