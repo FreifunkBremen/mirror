@@ -22,6 +22,5 @@ To create a new mirror you have to:
 * place you site.conf in the same directory as the mirror.py
 * run the following command with the URL of an existing mirror:
 
-    python mirror.py -u https://comunityname.freifunk.tld/mirror -s ./site.conf -r /path/to/http/dir
-
+    `python mirror.py --url https://comunityname.freifunk.tld/mirror --site-conf https://raw.githubusercontent.com/FreifunkBremen/gluon-site-ffhb/master/site.conf --root /path/to/http/dir`
 
