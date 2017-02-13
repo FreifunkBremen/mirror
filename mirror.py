@@ -131,8 +131,8 @@ class Mirror:
 
 
 parser = argparse.ArgumentParser(description='Create a sysupgrade freifunk mirror.')
-parser.add_argument('-u', '--url', type=str, help='Source url of the mirror (http://...)', required=True)
-parser.add_argument('-s', '--site-conf', type=str, default='site.conf', help='Url to site.conf', required=True)
+parser.add_argument('-u', '--url', type=str, help='Source URL of the mirror (http://...)', required=True)
+parser.add_argument('-s', '--site-conf', type=str, default='site.conf', help='URL to site.conf', required=True)
 parser.add_argument('-r', '--root', type=str, default='mirror', help='Root directory of the mirror. Default is ./mirror')
 
 # were taken implicitly from sys.argv
