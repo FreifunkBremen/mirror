@@ -146,7 +146,7 @@ class SLPP:
                     if self.ch != end:
                         s += '\\'
                 s += self.ch
-        print ERRORS['unexp_end_string']
+        print(ERRORS['unexp_end_string'])
 
     def object(self):
         o = {}
@@ -198,7 +198,7 @@ class SLPP:
                             o[idx] = k
                         idx += 1
                         k = None
-        print ERRORS['unexp_end_table'] #Bad exit here
+        print(ERRORS['unexp_end_table']) #Bad exit here
 
     def word(self):
         s = ''
@@ -244,7 +244,7 @@ class SLPP:
                     n += next_digit(ERRORS['mfnumber_sci'])
                     n += self.digit()
         except ParseError as e:
-            print e
+            print(e)
             return 0
         try:
             return int(n, 0)

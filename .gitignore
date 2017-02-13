@@ -55,3 +55,15 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# PyCharm
+.idea/
+
+# Custom ec8or
+work/
+mirror/
+*.log
+*.bin
+*.gz
+*.image
+site.conf
