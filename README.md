@@ -6,7 +6,7 @@ Fireware-Mirror is a simple python application that should make you able to host
 
 The application contains the following modules:
 * __mirror.py__: The heart.
-* __downloader.py__: Checks HTTP _if-modified-since_ header and downlaods files.
+* __downloader.py__: Checks HTTP _if-modified-since_ header and downloads files.
 * __gluon_manifest.py__: gluon.manifest parser.
 * __slpp.py__: Simple lua-python data structures parser [by SirAnthony](https://github.com/SirAnthony/slpp).
 
