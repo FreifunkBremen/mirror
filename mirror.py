@@ -42,9 +42,8 @@ class Mirror:
     def __init__(self, url, site_conf, destination):
         self.url = url
         self.working_directory = destination
-        self.downloader = Downloader()
+        self.downloader = Downloader(site_conf)
         self.branches = ["stable", "testing"]
-        self.site_conf = site_conf
 
     def create(self):
         self._prepare_directories()
@@ -133,7 +132,7 @@ class Mirror:
 
 parser = argparse.ArgumentParser(description='Create a sysupgrade freifunk mirror.')
 parser.add_argument('-u', '--url', type=str, help='Source url of the mirror (http://...)', required=True)
-parser.add_argument('-s', '--site-conf', type=str, default='site.conf', help='Path to site.conf, default is ./site.conf')
+parser.add_argument('-s', '--site-conf', type=str, default='site.conf', help='Url to site.conf', required=True)
 parser.add_argument('-r', '--root', type=str, default='mirror', help='Root directory of the mirror. Default is ./mirror')
 
 # were taken implicitly from sys.argv
