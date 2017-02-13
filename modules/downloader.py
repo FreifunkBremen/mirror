@@ -11,9 +11,10 @@ import logging
 class Downloader:
     log = logging.getLogger('mirror')
 
-    def __init__(self):
+    def __init__(self, site_conf_url):
         self.DATE_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
-        self.SITE_CONF = 'https://raw.githubusercontent.com/FreifunkBremen/gluon-site-ffhb/master/site.conf'
+        # https://raw.githubusercontent.com/FreifunkBremen/gluon-site-ffhb/master/site.conf
+        self.SITE_CONF = site_conf_url
 
     def download(self, url, destination):
         request = urllib2.Request(url)
