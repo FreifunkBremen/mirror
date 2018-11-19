@@ -1,12 +1,10 @@
-#!/usr/bin/python
-
+#!/usr/bin/env python
 
 import os
 import datetime
 from dateutil import parser
 import urllib2
 import logging
-
 
 class Downloader:
     log = logging.getLogger('mirror')
