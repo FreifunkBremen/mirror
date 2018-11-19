@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 #
 # ./download.py http://www.example.com/ index.html
 #
